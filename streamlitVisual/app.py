@@ -12,7 +12,8 @@ cols = st.columns(12)  # Expand to 12 columns to accommodate the new filters
 with cols[0]:
     panel_type_filter = st.selectbox("Panel Type", options=[None] + list(data['PNL_TYP'].unique()), index=0)
 with cols[1]:
-    metric_type_filter = st.multiselect("Metric Type", options=[None] + list(data['MTRC_TYP'].unique()), index=0)
+    metric_type_filter = st.multiselect("Metric Type", options=list(data['MTRC_TYP'].unique()), default=None)
+
 with cols[2]:
     sector_filter = st.selectbox("Sector", options=[None] + list(data['SCTR_NM'].unique()), index=0)
 with cols[3]:
@@ -45,7 +46,7 @@ filtered_data = data
 if panel_type_filter:
     filtered_data = filtered_data[filtered_data['PNL_TYP'] == panel_type_filter]
 if metric_type_filter:
-    filtered_data = filtered_data[filtered_data['MTRC_TYP'] == metric_type_filter]
+    filtered_data = filtered_data[filtered_data['MTRC_TYP'].isin(metric_type_filter)]
 if sector_filter:
     filtered_data = filtered_data[filtered_data['SCTR_NM'] == sector_filter]
 if sub_sector_filter:
@@ -73,7 +74,7 @@ if 'CORRELATION' in data.columns:
 if not filtered_data.empty:
     # Exclude 'PNL_TYP' from display and apply heatmap to 'MTD_SPEND' column
     display_columns = [col for col in filtered_data.columns if col != 'PNL_TYP']
-    display_data = filtered_data[display_columns].style.background_gradient(subset=['MTD_SPEND'], cmap='coolwarm')
+    display_data = filtered_data[display_columns].style.background_gradient(subset=['MARKETCAP'], cmap='coolwarm')
     st.write(display_data)  # Use st.write to render pandas Styler objects
 else:
     st.write("No data matches your filters.")
