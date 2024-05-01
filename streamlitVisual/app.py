@@ -30,7 +30,20 @@ with cols[7]:
 # Numerical filters
 with cols[8]:
     if 'MARKETCAP' in data.columns:
-        min_cap, max_cap = st.slider("Market Cap", int(data['MARKETCAP'].min()), int(data['MARKETCAP'].max()), (int(data['MARKETCAP'].min()), int(data['MARKETCAP'].max())))
+        col1, col2 = st.columns(2)
+
+        # Input for minimum market cap in the first column
+        with col1:
+            min_cap = st.number_input("Minimum Market Cap",
+                                      min_value=int(data['MARKETCAP'].min()),
+                                      value=int(data['MARKETCAP'].min()))
+
+        # Input for maximum market cap in the second column
+        with col2:
+            max_cap = st.number_input("Maximum Market Cap",
+                                      min_value=int(data['MARKETCAP'].min()),
+                                      max_value=int(data['MARKETCAP'].max()),
+                                      value=int(data['MARKETCAP'].max()))
 with cols[9]:
     if 'QTD_PROGRESS' in data.columns:
         min_days, max_days = st.slider("Days Through Quarter", int(data['QTD_PROGRESS'].min()), int(data['QTD_PROGRESS'].max()), (int(data['QTD_PROGRESS'].min()), int(data['QTD_PROGRESS'].max())))
